@@ -1,0 +1,269 @@
+index.html<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ARES COMUNIDADE</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #070707;
+      color: white;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 30px;
+      position: relative;
+      background:
+        radial-gradient(circle at center, #4b0b14 0%, #16070a 35%, #070707 70%);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 40px,
+        rgba(150, 20, 35, 0.04) 41px
+      );
+    }
+
+    .content {
+      position: relative;
+      z-index: 2;
+      max-width: 800px;
+    }
+
+    .symbol {
+      font-size: 75px;
+      margin-bottom: 15px;
+      filter: drop-shadow(0 0 20px #8f1422);
+    }
+
+    h1 {
+      font-size: clamp(55px, 12vw, 110px);
+      letter-spacing: 12px;
+      font-weight: 900;
+      color: #b51e2a;
+      text-shadow:
+        0 0 10px #7a101b,
+        0 0 35px #4d080f;
+    }
+
+    .subtitle {
+      margin-top: 10px;
+      font-size: 20px;
+      letter-spacing: 6px;
+      color: #ddd;
+    }
+
+    .line {
+      width: 180px;
+      height: 3px;
+      background: #8f1422;
+      margin: 30px auto;
+      box-shadow: 0 0 15px #8f1422;
+    }
+
+    .description {
+      font-size: 18px;
+      line-height: 1.7;
+      color: #bbb;
+      margin-bottom: 35px;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .button {
+      display: inline-block;
+      padding: 17px 35px;
+      text-decoration: none;
+      color: white;
+      background: #74111b;
+      border: 1px solid #b51e2a;
+      font-weight: bold;
+      letter-spacing: 2px;
+      transition: 0.25s;
+      box-shadow: 0 0 15px rgba(181, 30, 42, 0.25);
+    }
+
+    .button:hover {
+      background: #b51e2a;
+      transform: translateY(-4px);
+      box-shadow: 0 0 30px rgba(181, 30, 42, 0.7);
+    }
+
+    .button.dark {
+      background: #111;
+      border-color: #555;
+    }
+
+    .button.dark:hover {
+      background: #222;
+      border-color: #b51e2a;
+    }
+
+    .section {
+      padding: 80px 25px;
+      text-align: center;
+      background: #0b0b0b;
+      border-top: 1px solid #351015;
+    }
+
+    .section h2 {
+      color: #b51e2a;
+      font-size: 35px;
+      letter-spacing: 5px;
+      margin-bottom: 20px;
+    }
+
+    .cards {
+      max-width: 1000px;
+      margin: 40px auto 0;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .card {
+      width: 280px;
+      padding: 30px;
+      background: #111;
+      border: 1px solid #351015;
+      transition: 0.25s;
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+      border-color: #8f1422;
+      box-shadow: 0 10px 30px rgba(120, 10, 20, 0.25);
+    }
+
+    .card h3 {
+      color: #ddd;
+      margin-bottom: 12px;
+    }
+
+    .card p {
+      color: #888;
+      line-height: 1.5;
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px;
+      color: #555;
+      border-top: 1px solid #1d1d1d;
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        letter-spacing: 6px;
+      }
+
+      .subtitle {
+        font-size: 14px;
+        letter-spacing: 3px;
+      }
+
+      .description {
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <section class="hero">
+    <div class="content">
+
+      <div class="symbol">⚔️</div>
+
+      <h1>ARES</h1>
+
+      <div class="subtitle">COMUNIDADE ROBLOX</div>
+
+      <div class="line"></div>
+
+      <p class="description">
+        FORÇA • HONRA • GUERRA<br>
+        Uma comunidade feita para jogadores que não recuam diante do desafio.
+      </p>
+
+      <div class="buttons">
+        <a class="button" href="https://www.roblox.com/" target="_blank">
+          ⚔ ENTRAR NO ROBLOX
+        </a>
+
+        <a class="button dark" href="#comunidade">
+          CONHECER A COMUNIDADE
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="section" id="comunidade">
+
+    <h2>ARES COMUNIDADE</h2>
+
+    <p class="description">
+      Junte-se à nossa comunidade e faça parte da legião.
+    </p>
+
+    <div class="cards">
+
+      <div class="card">
+        <h3>⚔️ GUERREIROS</h3>
+        <p>
+          Faça parte da comunidade e evolua junto com outros jogadores.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>🏆 EVENTOS</h3>
+        <p>
+          Participe de desafios, competições e eventos dentro do Roblox.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>🔥 ARES</h3>
+        <p>
+          Mostre sua força e represente a comunidade dentro do Roblox.
+        </p>
+      </div>
+
+    </div>
+
+  </section>
+
+  <footer>
+    © 2026 ARES COMUNIDADE • ROBLOX
+  </footer>
+
+</body>
+</html>
