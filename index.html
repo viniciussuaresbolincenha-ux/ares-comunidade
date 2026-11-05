@@ -1,82 +1,68 @@
-html
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Loja Zenato - Produtos</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!-- Link para o CSS -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loja Virtual Zenato</title>
     <link rel="stylesheet" href="style.css">
-
-    <!-- Ícone da página (opcional) -->
-    <link rel="icon" href="https://raw.githubusercontent.com/zenato/zenato-assets/main/favicon.png">
+    <script defer src="script.js"></script>
 </head>
-
 <body>
+    <header>
+        <h1>Loja Virtual Zenato</h1>
+        <nav>
+            <a href="#">Início</a>
+            <a href="#">Produtos</a>
+            <a href="#">Sobre</a>
+            <a href="#">Contato</a>
+        </nav>
+    </header>
 
-<header>
-    <h1>Loja Zenato</h1>
-    <p>Os melhores produtos ao seu alcance!</p>
-</header>
-
-<main class="product-grid">
-
-    <!-- Produto 1 -->
-    <section class="card">
-        <img src="https://picsum.photos/seed/p1/300/200" alt="Produto 1">
-        <h2>Caneca Personalizada</h2>
-        <p class="price">R$ 39,90</p>
-        <button class="buy-btn" data-id="1" data-name="Caneca Personalizada" data-price="39.90">
-            Comprar
-        </button>
+    <section class="hero">
+        <h2>Bem‑vindo à nossa loja!</h2>
+        <p>Encontre os melhores produtos com qualidade e preço justo.</p>
+        <button id="cta-button">Ver Produtos</button>
     </section>
 
-    <!-- Produto 2 -->
-    <section class="card">
-        <img src="https://picsum.photos/seed/p2/300/200" alt="Produto 2">
-        <h2>Camisa Tech</h2>
-        <p class="price">R$ 89,90</p>
-        <button class="buy-btn" data-id="2" data-name="Camisa Tech" data-price="89.90">
-            Comprar
-        </button>
-    </section>
+    <main class="products">
+        <article class="product-card">
+            <img src="https://picsum.photos/300/200?random=1" alt="Produto 1">
+            <h3>Produto 1</h3>
+            <p class="price">R$ 99,90</p>
+            <p class="description">Descrição breve e atraente do produto 1.</p>
+            <button class="add-to-cart">Adicionar ao Carrinho</button>
+        </article>
 
-    <!-- Produto 3 -->
-    <section class="card">
-        <img src="https://picsum.photos/seed/p3/300/200" alt="Produto 3">
-        <h2>Fone Bluetooth</h2>
-        <p class="price">R$ 149,90</p>
-        <button class="buy-btn" data-id="3" data-name="Fone Bluetooth" data-price="149.90">
-            Comprar
-        </button>
-    </section>
+        <article class="product-card">
+            <img src="https://picsum.photos/300/200?random=2" alt="Produto 2">
+            <h3>Produto 2</h3>
+            <p class="price">R$ 149,90</p>
+            <p class="description">Descrição breve e atraente do produto 2.</p>
+            <button class="add-to-cart">Adicionar ao Carrinho</button>
+        </article>
 
-    <!-- Adicione quantos produtos quiser, seguindo o mesmo padrão -->
-</main>
+        <article class="product-card">
+            <img src="https://picsum.photos/300/200?random=3" alt="Produto 3">
+            <h3>Produto 3</h3>
+            <p class="price">R$ 79,90</p>
+            <p class="description">Descrição breve e atraente do produto 3.</p>
+            <button class="add-to-cart">Adicionar ao Carrinho</button>
+        </article>
 
-<!-- Modal de confirmação -->
-<div id="modal" class="modal hidden">
-    <div class="modal-content">
-        <span id="close-modal" class="close">&times;</span>
-        <h2>Confirmação de Compra</h2>
-        <p id="modal-text"></p>
-        <button id="confirm-buy" class="confirm-btn">Confirmar</button>
-    </div>
-</div>
+        <!-- Repita quantos cards precisar -->
+    </main>
 
-<!-- Script da página -->
-<script src="script.js"></script>
+    <footer>
+        <p>© 2026 Loja Virtual Zenato. Todos os direitos reservados.</p>
+        <div class="social">
+            <a href="#" aria-label="Instagram">📸</a>
+            <a href="#" aria-label="Twitter">🐦</a>
+            <a href="#" aria-label="Facebook">📘</a>
+        </div>
+    </footer>
 </body>
 </html>
-```
-
----
-
-### `style.css`
-
-```css
-/* ----- Reset básico ----- */
+/* Reset básico */
 *,
 *::before,
 *::after {
@@ -85,318 +71,181 @@ html
     padding: 0;
 }
 
-/* ----- Layout geral ----- */
-body {
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-    background: #f9f9f9;
-    color: #333;
-    line-height: 1.6;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
+/* Tipografia e cores principais */
+:root {
+    --primary: #2c3e50;
+    --accent: #e74c3c;
+    --bg: #f5f5f5;
+    --text: #333;
+    --light: #fff;
+    --radius: 8px;
+    --shadow: 0 4px 6px rgba(0,0,0,0.1);
+    --transition: 0.3s ease;
+    --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* ----- Header ----- */
-header {
-    background: #2c3e50;
-    color: #fff;
-    padding: 2rem 1rem;
-    text-align: center;
+body {
+    font-family: var(--font-main);
+    background-color: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
 }
+
+/* Header */
+header {
+    background: var(--primary);
+    color: var(--light);
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 header h1 {
+    font-size: 1.8rem;
+}
+
+header nav a {
+    color: var(--light);
+    margin-left: 1.5rem;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color var(--transition);
+}
+header nav a:hover {
+    color: var(--accent);
+}
+
+/* Hero */
+.hero {
+    background: url('https://picsum.photos/1200/400?blur=2') center/cover no-repeat;
+    color: var(--light);
+    text-align: center;
+    padding: 6rem 2rem;
+    position: relative;
+}
+.hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+}
+.hero > * {
+    position: relative;
+    z-index: 1;
+}
+.hero h2 {
+    font-size: 2.5rem;
     margin-bottom: 0.5rem;
 }
+.hero p {
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+}
+#cta-button {
+    background: var(--accent);
+    color: var(--light);
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: var(--radius);
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background var(--transition);
+}
+#cta-button:hover {
+    background: #c0392b;
+}
 
-/* ----- Grid de produtos ----- */
-.product-grid {
+/* Products grid */
+.products {
     display: grid;
-    gap: 1.5rem;
-    padding: 2rem;
-    max-width: 1200px;
-    margin: 0 auto;
-    width: 100%;
-}
-@media (min-width: 600px) {
-    .product-grid { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 2rem;
+    padding: 3rem 2rem;
 }
 
-/* ----- Card do produto ----- */
-.card {
-    background: #fff;
-    border-radius: 8px;
+/* Card */
+.product-card {
+    background: var(--light);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
     overflow: hidden;
-    box-shadow: 0 4px 12px rgba(0,0,0,.1);
     display: flex;
     flex-direction: column;
-    transition: transform .2s ease, box-shadow .2s ease;
+    transition: transform var(--transition);
 }
-.card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 20px rgba(0,0,0,.15);
+.product-card:hover {
+    transform: translateY(-5px);
 }
-.card img {
+.product-card img {
     width: 100%;
     height: auto;
-    object-fit: cover;
 }
-.card h2 {
-    font-size: 1.2rem;
-    margin: 0.75rem 1rem 0.25rem;
+.product-card h3 {
+    margin: 0.8rem 1rem 0.4rem;
+    font-size: 1.3rem;
 }
-.card .price {
+.product-card .price {
+    margin: 0 1rem;
     font-weight: bold;
-    color: #e67e22;
-    margin: 0 1rem 0.75rem;
+    color: var(--accent);
 }
-
-/* ----- Botões ----- */
-.buy-btn,
-.confirm-btn {
-    background: #27ae60;
-    color: #fff;
+.product-card .description {
+    margin: 0.4rem 1rem 1rem;
+    flex-grow: 1;
+}
+.product-card .add-to-cart {
+    background: var(--primary);
+    color: var(--light);
     border: none;
+    padding: 0.6rem;
+    margin: 1rem;
+    border-radius: var(--radius);
     cursor: pointer;
-    padding: 0.75rem;
-    font-size: 1rem;
-    margin: 0 1rem 1rem;
-    border-radius: 4px;
-    transition: background .2s ease, transform .1s ease;
+    transition: background var(--transition);
 }
-.buy-btn:hover,
-.confirm-btn:hover {
-    background: #1e8449;
-}
-.buy-btn:active,
-.confirm-btn:active {
-    transform: scale(0.97);
+.product-card .add-to-cart:hover {
+    background: #34495e;
 }
 
-/* ----- Modal ----- */
-.modal {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-}
-.modal.hidden { display: none; }
-
-.modal-content {
-    background: #fff;
-    border-radius: 8px;
-    padding: 2rem;
-    max-width: 400px;
-    width: 90%;
-    position: relative;
+/* Footer */
+footer {
+    background: var(--primary);
+    color: var(--light);
     text-align: center;
+    padding: 1.5rem 0;
 }
-.close {
-    position: absolute;
-    top: .5rem;
-    right: .75rem;
-    font-size: 1.5rem;
-    cursor: pointer;
-    color: #888;
+footer .social a {
+    margin: 0 0.5rem;
+    color: var(--light);
+    font-size: 1.4rem;
+    text-decoration: none;
 }
-.close:hover { color: #333; }
-```
 
----
-
-### `script.js`
-
-```js
-/* ==== Lógica dos botões ==== */
+/* Responsividade */
+@media (max-width: 600px) {
+    header {
+        flex-direction: column;
+        text-align: center;
+    }
+    header nav a {
+        margin: 0.5rem;
+    }
+}
 document.addEventListener('DOMContentLoaded', () => {
-    const modal = document.getElementById('modal');
-    const modalText = document.getElementById('modal-text');
-    const closeBtn = document.getElementById('close-modal');
-    const confirmBtn = document.getElementById('confirm-buy');
+    // Rolar para a seção de produtos ao clicar no CTA
+    const cta = document.getElementById('cta-button');
+    const productsSection = document.querySelector('.products');
 
-    // Armazena temporariamente o produto selecionado
-    let produtoSelecionado = null;
-
-    // Abre o modal quando o usuário clica em "Comprar"
-    document.querySelectorAll('.buy-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const id    = btn.dataset.id;
-            const nome  = btn.dataset.name;
-            const price = btn.dataset.price;
-
-            produtoSelecionado = { id, nome, price };
-            modalText.innerHTML = `
-                <strong>${nome}</strong><br>
-                Valor: R$ ${Number(price).toFixed(2)}<br><br>
-                Deseja confirmar a compra?
-            `;
-            modal.classList.remove('hidden');
-        });
+    cta?.addEventListener('click', () => {
+        productsSection.scrollIntoView({ behavior: 'smooth' });
     });
 
-    // Fecha o modal
-    closeBtn.addEventListener('click', () => modal.classList.add('hidden'));
-    modal.addEventListener('click', (e) => {
-        if (e.target === modal) modal.classList.add('hidden');
-    });# vendas.py
-# -------------------------------------------------
-# Sistema de vendas simples (linha de comando)
-# -------------------------------------------------
-# Autor: Zenato
-# Data : 05/11/2026
-# -------------------------------------------------
-
-from dataclasses import dataclass, field
-from typing import List, Dict
-
-
-@dataclass
-class Produto:
-    """Representa um produto no estoque."""
-    codigo: int
-    nome: str
-    preco: float
-    estoque: int
-
-    def __str__(self):
-        return f"[{self.codigo}] {self.nome} - R${self.preco:.2f} (Estoque: {self.estoque})"
-
-
-@dataclass
-class ItemCarrinho:
-    """Um item que o cliente adicionou ao carrinho."""
-    produto: Produto
-    quantidade: int
-
-    @property
-    def subtotal(self) -> float:
-        return self.produto.preco * self.quantidade
-
-
-class SistemaVendas:
-    def __init__(self):
-        self.produtos: Dict[int, Produto] = {}
-        self.carrinho: List[ItemCarrinho] = []
-        self._proximo_codigo = 1
-
-    # ------------------- Gestão de Produtos -------------------
-    def cadastrar_produto(self, nome: str, preco: float, estoque: int):
-        codigo = self._proximo_codigo
-        self._proximo_codigo += 1
-        self.produtos[codigo] = Produto(codigo, nome, preco, estoque)
-        print(f"Produto cadastrado: {self.produtos[codigo]}")
-
-    def listar_produtos(self):
-        if not self.produtos:
-            print("Nenhum produto cadastrado.")
-            return
-        print("\n=== Lista de Produtos ===")
-        for p in self.produtos.values():
-            print(p)
-
-    # ------------------- Carrinho -------------------
-    def adicionar_ao_carrinho(self, codigo: int, quantidade: int):
-        if codigo not in self.produtos:
-            print("Código de produto inexistente.")
-            return
-
-        produto = self.produtos[codigo]
-
-        if quantidade <= 0:
-            print("Quantidade deve ser maior que zero.")
-            return
-
-        if produto.estoque < quantidade:
-            print(f"Estoque insuficiente. Disponível: {produto.estoque}")
-            return
-
-        # Verifica se já há o mesmo produto no carrinho
-        for item in self.carrinho:
-            if item.produto.codigo == codigo:
-                # Atualiza quantidade
-                if produto.estoque < item.quantidade + quantidade:
-                    print(f"Estoque insuficiente para somar ao carrinho. Disponível: {produto.estoque - item.quantidade}")
-                    return
-                item.quantidade += quantidade
-                print(f"Adicionado ao carrinho: {produto.nome} (Qtde: {item.quantidade})")
-                return
-
-        # Caso ainda não exista no carrinho
-        self.carrinho.append(ItemCarrinho(produto, quantidade))
-        print(f"Adicionado ao carrinho: {produto.nome} (Qtde: {quantidade})")
-
-    def mostrar_carrinho(self):
-        if not self.carrinho:
-            print("Carrinho vazio.")
-            return
-
-        print("\n=== Carrinho ===")
-        total = 0.0
-        for idx, item in enumerate(self.carrinho, start=1):
-            print(f"{idx}. {item.produto.nome} - R${item.produto.preco:.2f} x {item.quantidade} = R${item.subtotal:.2f}")
-            total += item.subtotal
-        print(f"Total: R${total:.2f}")
-
-    # ------------------- Finalizar Compra -------------------
-    def finalizar_compra(self):
-        if not self.carrinho:
-            print("Carrinho vazio. Nada a finalizar.")
-            return
-
-        self.mostrar_carrinho()
-        confirma = input("\nDeseja confirmar a compra? (s/n): ").strip().lower()
-        if confirma != "s":
-            print("Compra cancelada.")
-            return
-
-        # Atualiza estoque
-        for item in self.carrinho:
-            item.produto.estoque -= item.quantidade
-
-        # Limpa o carrinho
-        self.carrinho.clear()
-        print("Compra concluída! Obrigado e volte sempre.")
-
-    # ------------------- Menu Interativo -------------------
-    def exibir_menu(self):
-        while True:
-            print("\n=== Sistema de Vendas ===")
-            print("1 - Cadastrar produto")
-            print("2 - Listar produtos")
-            print("3 - Adicionar ao carrinho")
-            print("4 - Mostrar carrinho")
-            print("5 - Finalizar compra")
-            print("0 - Sair")
-            escolha = input("Escolha uma opção: ").strip()
-
-            if escolha == "1":
-                nome = input("Nome do produto: ").strip()
-                preco = float(input("Preço (R$): ").replace(",", "."))
-                estoque = int(input("Quantidade em estoque: "))
-                self.cadastrar_produto(nome, preco, estoque)
-
-            elif escolha == "2":
-                self.listar_produtos()
-
-            elif escolha == "3":
-                codigo = int(input("Código do produto: "))
-                quantidade = int(input("Quantidade: "))
-                self.adicionar_ao_carrinho(codigo, quantidade)
-
-            elif escolha == "4":
-                self.mostrar_carrinho()
-
-            elif escolha == "5":
-                self.finalizar_compra()
-
-            elif escolha == "0":
-                print("Encerrando o sistema. Até a próxima!")
-                break
-            else:
-                print("Opção inválida. Tente novamente.")
-
-
-if __name__ == "__main__":
-    sistema = SistemaVendas()
-    sistema.exibir_menu()
+    // Simular adição ao carrinho
+    const buttons = document.querySelectorAll('.add-to-cart');
+    buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            alert('Item adicionado ao carrinho!');
+        });
+    });
+});
