@@ -1,269 +1,161 @@
-index.html<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ARES COMUNIDADE</title>
+# vendas.py
+# -------------------------------------------------
+# Sistema de vendas simples (linha de comando)
+# -------------------------------------------------
+# Autor: Zenato
+# Data : 05/11/2026
+# -------------------------------------------------
 
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: Arial, sans-serif;
-    }
+from dataclasses import dataclass, field
+from typing import List, Dict
 
-    body {
-      background: #070707;
-      color: white;
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
 
-    .hero {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 30px;
-      position: relative;
-      background:
-        radial-gradient(circle at center, #4b0b14 0%, #16070a 35%, #070707 70%);
-    }
+@dataclass
+class Produto:
+    """Representa um produto no estoque."""
+    codigo: int
+    nome: str
+    preco: float
+    estoque: int
 
-    .hero::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: repeating-linear-gradient(
-        45deg,
-        transparent,
-        transparent 40px,
-        rgba(150, 20, 35, 0.04) 41px
-      );
-    }
+    def __str__(self):
+        return f"[{self.codigo}] {self.nome} - R${self.preco:.2f} (Estoque: {self.estoque})"
 
-    .content {
-      position: relative;
-      z-index: 2;
-      max-width: 800px;
-    }
 
-    .symbol {
-      font-size: 75px;
-      margin-bottom: 15px;
-      filter: drop-shadow(0 0 20px #8f1422);
-    }
+@dataclass
+class ItemCarrinho:
+    """Um item que o cliente adicionou ao carrinho."""
+    produto: Produto
+    quantidade: int
 
-    h1 {
-      font-size: clamp(55px, 12vw, 110px);
-      letter-spacing: 12px;
-      font-weight: 900;
-      color: #b51e2a;
-      text-shadow:
-        0 0 10px #7a101b,
-        0 0 35px #4d080f;
-    }
+    @property
+    def subtotal(self) -> float:
+        return self.produto.preco * self.quantidade
 
-    .subtitle {
-      margin-top: 10px;
-      font-size: 20px;
-      letter-spacing: 6px;
-      color: #ddd;
-    }
 
-    .line {
-      width: 180px;
-      height: 3px;
-      background: #8f1422;
-      margin: 30px auto;
-      box-shadow: 0 0 15px #8f1422;
-    }
+class SistemaVendas:
+    def __init__(self):
+        self.produtos: Dict[int, Produto] = {}
+        self.carrinho: List[ItemCarrinho] = []
+        self._proximo_codigo = 1
 
-    .description {
-      font-size: 18px;
-      line-height: 1.7;
-      color: #bbb;
-      margin-bottom: 35px;
-    }
+    # ------------------- Gestão de Produtos -------------------
+    def cadastrar_produto(self, nome: str, preco: float, estoque: int):
+        codigo = self._proximo_codigo
+        self._proximo_codigo += 1
+        self.produtos[codigo] = Produto(codigo, nome, preco, estoque)
+        print(f"Produto cadastrado: {self.produtos[codigo]}")
 
-    .buttons {
-      display: flex;
-      gap: 15px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
+    def listar_produtos(self):
+        if not self.produtos:
+            print("Nenhum produto cadastrado.")
+            return
+        print("\n=== Lista de Produtos ===")
+        for p in self.produtos.values():
+            print(p)
 
-    .button {
-      display: inline-block;
-      padding: 17px 35px;
-      text-decoration: none;
-      color: white;
-      background: #74111b;
-      border: 1px solid #b51e2a;
-      font-weight: bold;
-      letter-spacing: 2px;
-      transition: 0.25s;
-      box-shadow: 0 0 15px rgba(181, 30, 42, 0.25);
-    }
+    # ------------------- Carrinho -------------------
+    def adicionar_ao_carrinho(self, codigo: int, quantidade: int):
+        if codigo not in self.produtos:
+            print("Código de produto inexistente.")
+            return
 
-    .button:hover {
-      background: #b51e2a;
-      transform: translateY(-4px);
-      box-shadow: 0 0 30px rgba(181, 30, 42, 0.7);
-    }
+        produto = self.produtos[codigo]
 
-    .button.dark {
-      background: #111;
-      border-color: #555;
-    }
+        if quantidade <= 0:
+            print("Quantidade deve ser maior que zero.")
+            return
 
-    .button.dark:hover {
-      background: #222;
-      border-color: #b51e2a;
-    }
+        if produto.estoque < quantidade:
+            print(f"Estoque insuficiente. Disponível: {produto.estoque}")
+            return
 
-    .section {
-      padding: 80px 25px;
-      text-align: center;
-      background: #0b0b0b;
-      border-top: 1px solid #351015;
-    }
+        # Verifica se já há o mesmo produto no carrinho
+        for item in self.carrinho:
+            if item.produto.codigo == codigo:
+                # Atualiza quantidade
+                if produto.estoque < item.quantidade + quantidade:
+                    print(f"Estoque insuficiente para somar ao carrinho. Disponível: {produto.estoque - item.quantidade}")
+                    return
+                item.quantidade += quantidade
+                print(f"Adicionado ao carrinho: {produto.nome} (Qtde: {item.quantidade})")
+                return
 
-    .section h2 {
-      color: #b51e2a;
-      font-size: 35px;
-      letter-spacing: 5px;
-      margin-bottom: 20px;
-    }
+        # Caso ainda não exista no carrinho
+        self.carrinho.append(ItemCarrinho(produto, quantidade))
+        print(f"Adicionado ao carrinho: {produto.nome} (Qtde: {quantidade})")
 
-    .cards {
-      max-width: 1000px;
-      margin: 40px auto 0;
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      flex-wrap: wrap;
-    }
+    def mostrar_carrinho(self):
+        if not self.carrinho:
+            print("Carrinho vazio.")
+            return
 
-    .card {
-      width: 280px;
-      padding: 30px;
-      background: #111;
-      border: 1px solid #351015;
-      transition: 0.25s;
-    }
+        print("\n=== Carrinho ===")
+        total = 0.0
+        for idx, item in enumerate(self.carrinho, start=1):
+            print(f"{idx}. {item.produto.nome} - R${item.produto.preco:.2f} x {item.quantidade} = R${item.subtotal:.2f}")
+            total += item.subtotal
+        print(f"Total: R${total:.2f}")
 
-    .card:hover {
-      transform: translateY(-6px);
-      border-color: #8f1422;
-      box-shadow: 0 10px 30px rgba(120, 10, 20, 0.25);
-    }
+    # ------------------- Finalizar Compra -------------------
+    def finalizar_compra(self):
+        if not self.carrinho:
+            print("Carrinho vazio. Nada a finalizar.")
+            return
 
-    .card h3 {
-      color: #ddd;
-      margin-bottom: 12px;
-    }
+        self.mostrar_carrinho()
+        confirma = input("\nDeseja confirmar a compra? (s/n): ").strip().lower()
+        if confirma != "s":
+            print("Compra cancelada.")
+            return
 
-    .card p {
-      color: #888;
-      line-height: 1.5;
-    }
+        # Atualiza estoque
+        for item in self.carrinho:
+            item.produto.estoque -= item.quantidade
 
-    footer {
-      text-align: center;
-      padding: 30px;
-      color: #555;
-      border-top: 1px solid #1d1d1d;
-    }
+        # Limpa o carrinho
+        self.carrinho.clear()
+        print("Compra concluída! Obrigado e volte sempre.")
 
-    @media (max-width: 600px) {
-      h1 {
-        letter-spacing: 6px;
-      }
+    # ------------------- Menu Interativo -------------------
+    def exibir_menu(self):
+        while True:
+            print("\n=== Sistema de Vendas ===")
+            print("1 - Cadastrar produto")
+            print("2 - Listar produtos")
+            print("3 - Adicionar ao carrinho")
+            print("4 - Mostrar carrinho")
+            print("5 - Finalizar compra")
+            print("0 - Sair")
+            escolha = input("Escolha uma opção: ").strip()
 
-      .subtitle {
-        font-size: 14px;
-        letter-spacing: 3px;
-      }
+            if escolha == "1":
+                nome = input("Nome do produto: ").strip()
+                preco = float(input("Preço (R$): ").replace(",", "."))
+                estoque = int(input("Quantidade em estoque: "))
+                self.cadastrar_produto(nome, preco, estoque)
 
-      .description {
-        font-size: 16px;
-      }
-    }
-  </style>
-</head>
+            elif escolha == "2":
+                self.listar_produtos()
 
-<body>
+            elif escolha == "3":
+                codigo = int(input("Código do produto: "))
+                quantidade = int(input("Quantidade: "))
+                self.adicionar_ao_carrinho(codigo, quantidade)
 
-  <section class="hero">
-    <div class="content">
+            elif escolha == "4":
+                self.mostrar_carrinho()
 
-      <div class="symbol">⚔️</div>
+            elif escolha == "5":
+                self.finalizar_compra()
 
-      <h1>ARES</h1>
+            elif escolha == "0":
+                print("Encerrando o sistema. Até a próxima!")
+                break
+            else:
+                print("Opção inválida. Tente novamente.")
 
-      <div class="subtitle">COMUNIDADE ROBLOX</div>
 
-      <div class="line"></div>
-
-      <p class="description">
-        FORÇA • HONRA • GUERRA<br>
-        Uma comunidade feita para jogadores que não recuam diante do desafio.
-      </p>
-
-      <div class="buttons">
-        <a class="button" href="https://www.roblox.com/" target="_blank">
-          ⚔ ENTRAR NO ROBLOX
-        </a>
-
-        <a class="button dark" href="#comunidade">
-          CONHECER A COMUNIDADE
-        </a>
-      </div>
-
-    </div>
-  </section>
-
-  <section class="section" id="comunidade">
-
-    <h2>ARES COMUNIDADE</h2>
-
-    <p class="description">
-      Junte-se à nossa comunidade e faça parte da legião.
-    </p>
-
-    <div class="cards">
-
-      <div class="card">
-        <h3>⚔️ GUERREIROS</h3>
-        <p>
-          Faça parte da comunidade e evolua junto com outros jogadores.
-        </p>
-      </div>
-
-      <div class="card">
-        <h3>🏆 EVENTOS</h3>
-        <p>
-          Participe de desafios, competições e eventos dentro do Roblox.
-        </p>
-      </div>
-
-      <div class="card">
-        <h3>🔥 ARES</h3>
-        <p>
-          Mostre sua força e represente a comunidade dentro do Roblox.
-        </p>
-      </div>
-
-    </div>
-
-  </section>
-
-  <footer>
-    © 2026 ARES COMUNIDADE • ROBLOX
-  </footer>
-
-</body>
-</html>
+if __name__ == "__main__":
+    sistema = SistemaVendas()
+    sistema.exibir_menu()
