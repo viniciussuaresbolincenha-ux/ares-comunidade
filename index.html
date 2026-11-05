@@ -1,4 +1,245 @@
-# vendas.py
+html
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Loja Zenato - Produtos</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Link para o CSS -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Ícone da página (opcional) -->
+    <link rel="icon" href="https://raw.githubusercontent.com/zenato/zenato-assets/main/favicon.png">
+</head>
+
+<body>
+
+<header>
+    <h1>Loja Zenato</h1>
+    <p>Os melhores produtos ao seu alcance!</p>
+</header>
+
+<main class="product-grid">
+
+    <!-- Produto 1 -->
+    <section class="card">
+        <img src="https://picsum.photos/seed/p1/300/200" alt="Produto 1">
+        <h2>Caneca Personalizada</h2>
+        <p class="price">R$ 39,90</p>
+        <button class="buy-btn" data-id="1" data-name="Caneca Personalizada" data-price="39.90">
+            Comprar
+        </button>
+    </section>
+
+    <!-- Produto 2 -->
+    <section class="card">
+        <img src="https://picsum.photos/seed/p2/300/200" alt="Produto 2">
+        <h2>Camisa Tech</h2>
+        <p class="price">R$ 89,90</p>
+        <button class="buy-btn" data-id="2" data-name="Camisa Tech" data-price="89.90">
+            Comprar
+        </button>
+    </section>
+
+    <!-- Produto 3 -->
+    <section class="card">
+        <img src="https://picsum.photos/seed/p3/300/200" alt="Produto 3">
+        <h2>Fone Bluetooth</h2>
+        <p class="price">R$ 149,90</p>
+        <button class="buy-btn" data-id="3" data-name="Fone Bluetooth" data-price="149.90">
+            Comprar
+        </button>
+    </section>
+
+    <!-- Adicione quantos produtos quiser, seguindo o mesmo padrão -->
+</main>
+
+<!-- Modal de confirmação -->
+<div id="modal" class="modal hidden">
+    <div class="modal-content">
+        <span id="close-modal" class="close">&times;</span>
+        <h2>Confirmação de Compra</h2>
+        <p id="modal-text"></p>
+        <button id="confirm-buy" class="confirm-btn">Confirmar</button>
+    </div>
+</div>
+
+<!-- Script da página -->
+<script src="script.js"></script>
+</body>
+</html>
+```
+
+---
+
+### `style.css`
+
+```css
+/* ----- Reset básico ----- */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* ----- Layout geral ----- */
+body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background: #f9f9f9;
+    color: #333;
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ----- Header ----- */
+header {
+    background: #2c3e50;
+    color: #fff;
+    padding: 2rem 1rem;
+    text-align: center;
+}
+header h1 {
+    margin-bottom: 0.5rem;
+}
+
+/* ----- Grid de produtos ----- */
+.product-grid {
+    display: grid;
+    gap: 1.5rem;
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+}
+@media (min-width: 600px) {
+    .product-grid { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+}
+
+/* ----- Card do produto ----- */
+.card {
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,.1);
+    display: flex;
+    flex-direction: column;
+    transition: transform .2s ease, box-shadow .2s ease;
+}
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0,0,0,.15);
+}
+.card img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+.card h2 {
+    font-size: 1.2rem;
+    margin: 0.75rem 1rem 0.25rem;
+}
+.card .price {
+    font-weight: bold;
+    color: #e67e22;
+    margin: 0 1rem 0.75rem;
+}
+
+/* ----- Botões ----- */
+.buy-btn,
+.confirm-btn {
+    background: #27ae60;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    padding: 0.75rem;
+    font-size: 1rem;
+    margin: 0 1rem 1rem;
+    border-radius: 4px;
+    transition: background .2s ease, transform .1s ease;
+}
+.buy-btn:hover,
+.confirm-btn:hover {
+    background: #1e8449;
+}
+.buy-btn:active,
+.confirm-btn:active {
+    transform: scale(0.97);
+}
+
+/* ----- Modal ----- */
+.modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+.modal.hidden { display: none; }
+
+.modal-content {
+    background: #fff;
+    border-radius: 8px;
+    padding: 2rem;
+    max-width: 400px;
+    width: 90%;
+    position: relative;
+    text-align: center;
+}
+.close {
+    position: absolute;
+    top: .5rem;
+    right: .75rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #888;
+}
+.close:hover { color: #333; }
+```
+
+---
+
+### `script.js`
+
+```js
+/* ==== Lógica dos botões ==== */
+document.addEventListener('DOMContentLoaded', () => {
+    const modal = document.getElementById('modal');
+    const modalText = document.getElementById('modal-text');
+    const closeBtn = document.getElementById('close-modal');
+    const confirmBtn = document.getElementById('confirm-buy');
+
+    // Armazena temporariamente o produto selecionado
+    let produtoSelecionado = null;
+
+    // Abre o modal quando o usuário clica em "Comprar"
+    document.querySelectorAll('.buy-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const id    = btn.dataset.id;
+            const nome  = btn.dataset.name;
+            const price = btn.dataset.price;
+
+            produtoSelecionado = { id, nome, price };
+            modalText.innerHTML = `
+                <strong>${nome}</strong><br>
+                Valor: R$ ${Number(price).toFixed(2)}<br><br>
+                Deseja confirmar a compra?
+            `;
+            modal.classList.remove('hidden');
+        });
+    });
+
+    // Fecha o modal
+    closeBtn.addEventListener('click', () => modal.classList.add('hidden'));
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) modal.classList.add('hidden');
+    });# vendas.py
 # -------------------------------------------------
 # Sistema de vendas simples (linha de comando)
 # -------------------------------------------------
