@@ -1,263 +1,660 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Concord</title>
+
 <style>
-:root{--bg:#fff7ed;--rail:#ea580c;--side:#ffedd5;--ink:#1c1917;--mute:#78716c;--acc:#c2410c;--line:#fed7aa;--in:#fff;
-box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1c1917;--rail:#9a3412;--side:#292524;--ink:#fafaf9;--mute:#a8a29e;--acc:#fb923c;--line:#44403c;--in:#292524;color-scheme:dark}}
-:root[data-theme="dark"]{--bg:#1c1917;--rail:#9a3412;--side:#292524;--ink:#fafaf9;--mute:#a8a29e;--acc:#fb923c;--line:#44403c;--in:#292524;color-scheme:dark}
-*{box-sizing:border-box}html,body{height:100%;margin:0}
-body{background:var(--bg);color:var(--ink);font:15px/1.4 system-ui,-apple-system,"Segoe UI",sans-serif;overflow:hidden}
-#app{display:flex;height:100%}
-#rail{width:64px;background:var(--rail);display:flex;flex-direction:column;align-items:center;gap:8px;padding:10px 0;overflow-y:auto;flex:none}
-.sv{width:46px;height:46px;border-radius:50%;border:0;background:#fff3;color:#fff;font:600 17px inherit;cursor:pointer;transition:.15s}
-.sv:hover,.sv.on{border-radius:14px;background:#fff;color:var(--acc)}
-#side{width:220px;background:var(--side);border-right:1px solid var(--line);display:flex;flex-direction:column;flex:none}
-#side h2{margin:0;padding:14px;font-size:16px;border-bottom:1px solid var(--line)}
-#chs{flex:1;overflow-y:auto;padding:8px}
-.ch{display:block;width:100%;text-align:left;border:0;background:none;color:var(--mute);padding:6px 10px;border-radius:6px;cursor:pointer;font:inherit}
-.ch:hover{background:var(--line)}.ch.on{background:var(--line);color:var(--ink);font-weight:600}
-.add{color:var(--acc)!important}
-#me{padding:10px;border-top:1px solid var(--line);display:flex;align-items:center;gap:8px;font-weight:600}
-#main{flex:1;display:flex;flex-direction:column;min-width:0}
-#top{padding:14px;border-bottom:1px solid var(--line);font-weight:700}
-#msgs{flex:1;overflow-y:auto;padding:12px 16px}
-.m{display:flex;gap:10px;padding:4px 0}.m:hover .del{opacity:1}
-.av{width:38px;height:38px;border-radius:50%;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;flex:none}
-.hd{font-weight:700}.ts{color:var(--mute);font-size:12px;margin-left:6px;font-weight:400}
-.tx{white-space:pre-wrap;word-break:break-word}
-.del{opacity:0;border:0;background:none;color:var(--mute);cursor:pointer;margin-left:6px}
-#typ{height:22px;padding:0 16px;color:var(--mute);font-size:13px;font-style:italic}
-#box{padding:0 16px 14px}
-#inp{width:100%;padding:12px;border-radius:10px;border:1px solid var(--line);background:var(--in);color:var(--ink);font:inherit;resize:none}
-#mem{width:190px;background:var(--side);border-left:1px solid var(--line);padding:12px;overflow-y:auto;flex:none}
-#mem h3{margin:0 0 8px;font-size:12px;text-transform:uppercase;color:var(--mute)}
-.mb{display:flex;align-items:center;gap:8px;padding:4px 0}.mb .av{width:28px;height:28px;font-size:13px}
-.dot{width:8px;height:8px;border-radius:50%;background:#16a34a;margin-left:auto}
-#gate{margin:auto;max-width:360px;text-align:center;padding:24px}
-#gate input,#gate button{padding:10px;font:inherit;border-radius:8px}
-#gate input{border:1px solid var(--line);background:var(--in);color:var(--ink);width:70%}
-#gate button{border:0;background:var(--rail);color:#fff;cursor:pointer}
-.empty{color:var(--mute);text-align:center;margin-top:40px}
-.ov{position:fixed;inset:0;background:#0007;display:flex;align-items:center;justify-content:center;z-index:50;padding:16px}
-.bx{background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:14px;padding:18px;width:100%;max-width:380px}
-.bx h3{margin:0 0 12px}.bx>input{width:100%;padding:10px;border-radius:8px;border:1px solid var(--line);background:var(--in);color:var(--ink);font:inherit;margin-bottom:12px}
-.lb{font-size:12px;text-transform:uppercase;color:var(--mute);margin-bottom:6px}
-.pl{max-height:200px;overflow-y:auto;border:1px solid var(--line);border-radius:8px;padding:4px 8px;margin-bottom:12px}
-.pr{display:flex;align-items:center;gap:8px;padding:5px 0;cursor:pointer}.pr .av{width:26px;height:26px;font-size:12px}
-.br{display:flex;justify-content:flex-end;gap:8px}.br button{border:0;border-radius:8px;padding:8px 14px;background:var(--rail);color:#fff;cursor:pointer;font:inherit}.br .no{background:var(--line);color:var(--ink)}
-.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:8px;z-index:60;max-width:90%}
-.vcp{display:flex;align-items:center;gap:6px;padding:2px 10px 2px 22px;font-size:13px;color:var(--mute)}.vcp .av{width:18px;height:18px;font-size:10px}#call{padding:8px 10px;border-top:1px solid var(--line);font-size:13px;display:none}#call b{color:#16a34a}#call button{border:0;border-radius:6px;padding:4px 8px;margin:4px 4px 0 0;cursor:pointer;background:var(--rail);color:#fff;font:inherit}
-@media(max-width:760px){#mem{display:none}#side{width:150px}}
+:root {
+  --bg: #313338;
+  --side: #1e1f22;
+  --panel: #2b2d31;
+  --accent: #5865f2;
+  --text: #f2f3f5;
+  --muted: #b5bac1;
+  --line: #3f4147;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 15px system-ui, Arial, sans-serif;
+  height: 100vh;
+}
+
+button, input {
+  font: inherit;
+}
+
+button {
+  border: 0;
+  border-radius: 6px;
+  padding: 10px 13px;
+  background: var(--accent);
+  color: white;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+button:hover {
+  filter: brightness(1.1);
+}
+
+input {
+  background: #1e1f22;
+  color: var(--text);
+  border: 1px solid #44464d;
+  border-radius: 6px;
+  padding: 11px;
+  width: 100%;
+  outline: none;
+}
+
+input:focus {
+  border-color: var(--accent);
+}
+
+#status {
+  padding: 9px 14px;
+  background: #202127;
+  color: #d9dcff;
+  font-size: 13px;
+}
+
+#login {
+  max-width: 440px;
+  margin: 10vh auto;
+  padding: 28px;
+  background: var(--panel);
+  border-radius: 12px;
+  box-shadow: 0 8px 30px #0003;
+}
+
+#login h1 {
+  margin-top: 0;
+  font-size: 32px;
+}
+
+#login p {
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.row {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+#app {
+  display: none;
+  height: calc(100vh - 38px);
+  grid-template-columns: 72px 245px minmax(0, 1fr);
+}
+
+.rail {
+  background: var(--side);
+  padding: 12px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  overflow: auto;
+}
+
+.rail button {
+  width: 48px;
+  height: 48px;
+  border-radius: 16px;
+  padding: 0;
+  font-size: 20px;
+  background: #35373c;
+}
+
+.rail button.active {
+  background: var(--accent);
+  border-radius: 14px;
+}
+
+.servers {
+  background: #2b2d31;
+  padding: 16px 12px;
+  overflow: auto;
+}
+
+.brand {
+  font-weight: 800;
+  font-size: 19px;
+  padding: 5px 8px 16px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 12px;
+}
+
+.section {
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 800;
+  letter-spacing: .07em;
+  margin: 18px 8px 8px;
+}
+
+.serveritem {
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  color: var(--muted);
+  margin: 3px 0;
+  padding: 10px;
+}
+
+.serveritem:hover,
+.serveritem.active {
+  background: #3b3d44;
+  color: white;
+}
+
+.main {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+}
+
+.top {
+  height: 56px;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  font-weight: 700;
+}
+
+#messages {
+  flex: 1;
+  overflow: auto;
+  padding: 20px;
+}
+
+.welcome {
+  color: var(--muted);
+  margin-top: 25vh;
+  text-align: center;
+}
+
+.msg {
+  margin: 0 0 16px;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.msg strong {
+  display: block;
+  margin-bottom: 3px;
+}
+
+.msg small {
+  color: var(--muted);
+  font-size: 11px;
+  margin-left: 8px;
+  font-weight: 400;
+}
+
+.composer {
+  display: flex;
+  gap: 10px;
+  padding: 0 20px 20px;
+}
+
+.composer input {
+  flex: 1;
+}
+
+.empty {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.5;
+  padding: 8px;
+}
+
+@media (max-width: 650px) {
+  #app {
+    grid-template-columns: 58px 150px minmax(0, 1fr);
+  }
+
+  .rail {
+    padding: 8px 5px;
+  }
+
+  .rail button {
+    width: 42px;
+    height: 42px;
+  }
+
+  .servers {
+    padding: 10px 6px;
+  }
+
+  .top {
+    padding: 0 10px;
+  }
+
+  #messages {
+    padding: 12px;
+  }
+
+  .composer {
+    padding: 0 10px 12px;
+  }
+
+  .brand {
+    font-size: 15px;
+  }
+}
 </style>
 </head>
+
 <body>
+
+<div id="status">Concord • iniciando...</div>
+
+<section id="login">
+  <h1>Concord</h1>
+
+  <p>
+    Entre com um nome para conversar e criar seus próprios servidores.
+  </p>
+
+  <label for="nickname">Seu nome</label>
+
+  <div class="row">
+    <input id="nickname" maxlength="24" placeholder="Seu nome">
+    <button id="enter">Entrar</button>
+  </div>
+
+  <p id="loginError" role="alert"></p>
+</section>
+
 <div id="app">
- <div id="rail"></div>
- <div id="side"><h2 id="svn">Concord</h2><button id="inv" class="ch add" style="display:none">+ adicionar pessoas</button><div id="chs"></div><div id="call"></div><div id="aud" hidden></div><div id="me"></div></div>
- <div id="main">
-  <div id="top"></div><div id="msgs"></div><div id="typ"></div>
-  <div id="box"><textarea id="inp" rows="1" placeholder="Escreva uma mensagem…" disabled></textarea></div>
- </div>
- <div id="mem"></div>
+
+  <aside class="rail">
+    <button title="Início" class="active">C</button>
+    <button title="Adicionar servidor" id="quickAdd">＋</button>
+  </aside>
+
+  <aside class="servers">
+
+    <div class="brand">Concord</div>
+
+    <button id="createServer" style="width:100%">
+      ＋ Criar servidor
+    </button>
+
+    <div class="section">SEUS SERVIDORES</div>
+
+    <div id="serverList" class="empty">
+      Carregando servidores...
+    </div>
+
+    <div class="section">CONTA</div>
+
+    <div id="account" class="empty"></div>
+
+    <button id="logout"
+      style="width:100%;background:#41434a;margin-top:8px">
+      Sair
+    </button>
+
+  </aside>
+
+  <main class="main">
+
+    <header class="top">
+      <span id="roomTitle"># geral</span>
+    </header>
+
+    <div id="messages">
+      <div class="welcome">
+        <h2>Bem-vindo ao Concord</h2>
+        <p>Crie um servidor para começar a conversar.</p>
+      </div>
+    </div>
+
+    <form id="composer" class="composer">
+      <input
+        id="messageInput"
+        maxlength="1500"
+        placeholder="Envie uma mensagem..."
+        autocomplete="off"
+      >
+      <button type="submit">Enviar</button>
+    </form>
+
+  </main>
 </div>
+
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+
 <script>
-const $=s=>document.querySelector(s);
-const el=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e};
-let vc=null,vcn='',stream=null,muted=false,pcs={},myPeer=null;
-let db,room,me=null,servers=[],channels=[],msgs=[],users={},peers=[],sv=null,ch=null,unCh=null,unMsg=null,lastPres=0,typT=null;
-const nm=id=>(users[id]&&users[id].nick)||'Anônimo';
-const hue=s=>{let h=0;for(const c of s||'')h=(h*31+c.charCodeAt(0))%360;return h};
-const av=id=>{const a=el('div','av',nm(id)[0].toUpperCase());a.style.background='hsl('+hue(id)+' 60% 42%)';return a};
-const hm=t=>new Date(t).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
+/* CONFIGURAÇÃO DO FIREBASE */
 
-function gate(msg,ask){
-  const g=el('div');g.id='gate';g.append(el('h1',null,'Concord'),el('p',null,msg));
-  if(ask){const i=el('input');i.placeholder='Seu apelido';i.maxLength=24;const b=el('button',null,'Entrar');
-    const go=async()=>{const v=i.value.trim();if(!v)return;await db.doc('users/'+me).set({nick:v});g.remove();$('#app').style.display='flex'};
-    b.onclick=go;i.onkeydown=e=>{if(e.key==='Enter')go()};g.append(i,' ',b);}
-  $('#app').style.display='none';document.body.append(g);
-}
-
-async function init(){
-  try{db=await claude.use('db');const u=await claude.use('user');me=u?await u.id():null;room=await claude.use('room')}catch(e){}
-  if(!db||!me){gate('Você precisa abrir esta página logado no claude.ai, com acesso de Contribuidor ao artefato.');return}
-  const to=setTimeout(()=>{$('#msgs').replaceChildren(el('div','empty','Conexão lenta ou sem permissão de escrita. Verifique seu nível de acesso.'))},10000);
-  db.collection('users').onSnapshot(s=>{users={};s.docs.forEach(d=>users[d.id]=d.data());
-    if(!users[me]&&!$('#gate'))gate('Escolha um apelido para começar.',true);renderAll()},()=>{});
-  db.collection('servers').onSnapshot(s=>{clearTimeout(to);servers=s.docs.map(d=>({id:d.id,...d.data()})).filter(x=>!x.members||x.members.includes(me)||x.owner===me).sort((a,b)=>a.ts-b.ts);
-    if(!sv&&servers.length)pickSv(servers[0].id);renderRail();if(!servers.length)$('#msgs').replaceChildren(el('div','empty','Nenhum servidor ainda. Crie o primeiro com o botão +'))},()=>{});
-  if(room){room.onPeers(c=>{peers=c.peers;const mp=peers.find(p=>p.isMe);if(mp)myPeer=mp.peer;syncCall();renderCh();renderMem();renderTyp()},()=>{});room.on('rtc',onRtc,()=>{});setInterval(renderTyp,1000)}
-  $('#inp').onkeydown=e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send()}};
-  $('#inp').oninput=typing;
-}
-
-function pickSv(id){
-  sv=id;ch=null;channels=[];msgs=[];if(unCh)unCh();if(unMsg){unMsg();unMsg=null}
-  unCh=db.collection('servers/'+id+'/channels').onSnapshot(s=>{
-    channels=s.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>a.ts-b.ts);
-    if(!ch||!channels.find(c=>c.id===ch)){const t=channels.find(x=>x.type!=='voice');if(t)pickCh(t.id)}renderCh()},()=>{});
-  renderRail();
-}
-function pickCh(id){
-  ch=id;if(unMsg)unMsg();msgs=[];
-  unMsg=db.collection('servers/'+sv+'/channels/'+id+'/messages').orderBy('ts','desc').limit(100).onSnapshot(s=>{
-    msgs=s.docs.map(d=>({id:d.id,...d.data()})).reverse();renderMsgs()},()=>{});
-  $('#inp').disabled=false;presence();renderCh();renderMem();
-}
-
-async function mkServer(){
-  const q=await modal({title:'Criar servidor',ph:'Nome do servidor',people:true,ok:'Criar'});if(!q)return;
-  const r=await db.collection('servers').add({name:q.name.slice(0,30),owner:me,members:[me,...q.sel],ts:Date.now()});
-  await db.collection('servers/'+r.id+'/channels').add({name:'geral',ts:Date.now()});
-  pickSv(r.id);
-}
-async function mkChannel(voice){
-  if(!sv)return;const q=await modal({title:voice===true?'Novo canal de voz':'Novo canal de texto',ph:'nome-do-canal',ok:'Criar'});if(!q)return;const n=q.name.toLowerCase().replace(/\s+/g,'-');
-  const r=await db.collection('servers/'+sv+'/channels').add({name:n.slice(0,30),ts:Date.now(),type:voice===true?'voice':'text'});if(voice!==true)pickCh(r.id);
-}
-async function send(){
-  const i=$('#inp'),t=i.value.trim();if(!t||!ch)return;i.value='';
-  clearTimeout(typT);presence(false);
-  try{await db.collection('servers/'+sv+'/channels/'+ch+'/messages').add({uid:me,text:t.slice(0,2000),ts:Date.now()})}
-  catch(e){i.value=t;alert('Não foi possível enviar. Seu acesso pode ser somente leitura.')}
-}
-function presence(typ){
-  if(!room)return;
-  room.presence({sv:sv,ch:ch,vc:vc,typing:typ?Date.now():null}).catch(()=>{});
-}
-function typing(){
-  if(Date.now()-lastPres>2000){lastPres=Date.now();presence(true)}
-  clearTimeout(typT);typT=setTimeout(()=>presence(false),3500);
-}
-
-function renderAll(){renderRail();renderCh();renderMsgs();renderMem();renderMe()}
-function renderMe(){const m=$('#me');if(!me||!users[me]){m.replaceChildren();return}m.replaceChildren(av(me),el('span',null,nm(me)))}
-function renderRail(){
-  const r=$('#rail');r.replaceChildren();
-  servers.forEach(s=>{const b=el('button','sv'+(s.id===sv?' on':''),(s.name||'?')[0].toUpperCase());b.title=s.name;b.onclick=()=>pickSv(s.id);r.append(b)});
-  const a=el('button','sv','+');a.title='Criar servidor';a.onclick=mkServer;r.append(a);
-  const cur=servers.find(s=>s.id===sv);$('#svn').textContent=cur?cur.name:'Concord';$('#inv').style.display=cur&&cur.owner===me?'block':'none';
-}
-function renderCh(){
-  const c=$('#chs');c.replaceChildren();
-  if(sv){channels.forEach(x=>{
-    if(x.type==='voice'){const vb=el('button','ch'+(x.id===vc?' on':''),'🔊 '+x.name);vb.onclick=()=>joinCall(x.id,x.name);c.append(vb);
-      const seen=new Set();peers.filter(p=>p.by&&p.presence&&p.presence.vc===x.id&&!seen.has(p.peer)&&seen.add(p.peer)).forEach(p=>{const r=el('div','vcp');r.append(av(p.by),el('span',null,nm(p.by)));c.append(r)});return}
-    const b=el('button','ch'+(x.id===ch?' on':''),'# '+x.name);b.onclick=()=>pickCh(x.id);c.append(b)});
-    const a=el('button','ch add','+ canal de texto');a.onclick=()=>mkChannel(false);c.append(a);
-    const v=el('button','ch add','+ canal de voz');v.onclick=()=>mkChannel(true);c.append(v)}
-  const cur=channels.find(x=>x.id===ch);$('#top').textContent=cur?'# '+cur.name:'';
-}
-function renderMsgs(){
-  const box=$('#msgs'),stick=box.scrollTop+box.clientHeight>=box.scrollHeight-60;
-  box.replaceChildren();
-  if(!msgs.length){box.append(el('div','empty','Nenhuma mensagem ainda. Diga olá!'));return}
-  msgs.forEach(m=>{
-    const row=el('div','m'),body=el('div'),hd=el('div','hd',nm(m.uid));
-    hd.append(el('span','ts',hm(m.ts)));
-    if(m.uid===me){const d=el('button','del','apagar');d.onclick=()=>db.doc('servers/'+sv+'/channels/'+ch+'/messages/'+m.id).delete().catch(()=>{});hd.append(d)}
-    body.append(hd,el('div','tx',m.text));row.append(av(m.uid),body);box.append(row)});
-  if(stick)box.scrollTop=box.scrollHeight;
-}
-function renderMem(){
-  const m=$('#mem');m.replaceChildren();const seen=new Set();
-  const on=peers.filter(p=>p.by&&p.presence&&p.presence.sv===sv&&!seen.has(p.by)&&seen.add(p.by));
-  m.append(el('h3',null,'Online — '+on.length));
-  on.forEach(p=>{const r=el('div','mb');r.append(av(p.by),el('span',null,nm(p.by)),el('span','dot'));m.append(r)});
-}
-function renderTyp(){
-  const names=[...new Set(peers.filter(p=>!p.isMe&&p.by&&p.presence&&p.presence.ch===ch&&p.presence.typing&&Date.now()-p.presence.typing<5000).map(p=>nm(p.by)))];
-  $('#typ').textContent=!names.length?'':names.length===1?names[0]+' está digitando…':names.length===2?names.join(' e ')+' estão digitando…':'Várias pessoas estão digitando…';
-}
-/* ===== Janelas (prompt/alert nativos são bloqueados no artefato) ===== */
-function toast(t){const d=el('div','toast',t);document.body.append(d);setTimeout(()=>d.remove(),4500)}
-window.alert=toast;
-function modal(o){return new Promise(res=>{
-  const ov=el('div','ov'),bx=el('div','bx');ov.append(bx);bx.append(el('h3',null,o.title));
-  let inp=null;if(o.ph){inp=el('input');inp.type='text';inp.placeholder=o.ph;inp.maxLength=30;bx.append(inp)}
-  const sel=new Set(o.sel||[]);
-  if(o.people){bx.append(el('div','lb','Adicionar pessoas'));const l=el('div','pl');
-    const ids=Object.keys(users).filter(id=>id!==me);
-    if(!ids.length)l.append(el('div','empty','Ninguém mais entrou ainda. Quem abrir o Concord e escolher um apelido aparece aqui.'));
-    ids.forEach(id=>{const r=el('label','pr'),c=el('input');c.type='checkbox';c.checked=sel.has(id);c.onchange=()=>{c.checked?sel.add(id):sel.delete(id)};r.append(c,av(id),el('span',null,nm(id)));l.append(r)});bx.append(l)}
-  const row=el('div','br'),no=el('button','no','Cancelar'),ok=el('button',null,o.ok||'Criar');
-  const done=v=>{ov.remove();res(v)};
-  no.onclick=()=>done(null);
-  ok.onclick=()=>{const n=inp?inp.value.trim():'';if(inp&&!n){inp.focus();return}done({name:n,sel:[...sel]})};
-  ov.onclick=e=>{if(e.target===ov)done(null)};
-  if(inp)inp.onkeydown=e=>{if(e.key==='Enter')ok.click()};
-  row.append(no,ok);bx.append(row);document.body.append(ov);if(inp)inp.focus();
-})}
-$('#inv').onclick=async()=>{
-  const cur=servers.find(s=>s.id===sv);if(!cur)return;
-  const q=await modal({title:'Pessoas em '+cur.name,people:true,sel:(cur.members||[]).filter(x=>x!==me),ok:'Salvar'});
-  if(q)db.doc('servers/'+sv).update({members:[me,...q.sel]}).catch(()=>toast('Não foi possível salvar.'));
+const FIREBASE_CONFIG = {
+  apiKey: "COLE_AQUI_SUA_API_KEY",
+  authDomain: "concord-5e522.firebaseapp.com",
+  projectId: "concord-5e522",
+  storageBucket: "concord-5e522.firebasestorage.app",
+  messagingSenderId: "98843636750",
+  appId: "1:98843636750:web:2c8298a235c5396db3f85f"
 };
-/* ===== Voz (WebRTC em malha, sinalização via room) ===== */
-const ICE=[{urls:'stun:stun.l.google.com:19302'}];
-async function joinCall(id,name){
-  if(!room){alert('Chamadas indisponíveis nesta sessão.');return}
-  if(vc===id)return;
-  if(vc)leaveCall();
-  try{stream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true}})}
-  catch(e){alert('Não consegui acessar o microfone. O navegador, ou o próprio claude.ai, pode estar bloqueando.');return}
-  vc=id;vcn=name;muted=false;presence(false);renderCh();renderCall();syncCall();
+
+const $ = id => document.getElementById(id);
+
+let auth;
+let db;
+let currentUser = null;
+let nickname = "";
+let currentServer = null;
+let unsubscribeMessages = null;
+let unsubscribeServers = null;
+
+function status(text) {
+  $("status").textContent = "Concord • " + text;
 }
-function leaveCall(){
-  Object.keys(pcs).forEach(closePc);
-  if(stream){stream.getTracks().forEach(t=>t.stop());stream=null}
-  vc=null;presence(false);renderCh();renderCall();
+
+function showError(text) {
+  $("loginError").textContent = text;
 }
-function closePc(k){const o=pcs[k];if(!o)return;try{o.pc.close()}catch(e){}if(o.au)o.au.remove();delete pcs[k]}
-function mkPc(k){
-  if(pcs[k])return pcs[k].pc;
-  const pc=new RTCPeerConnection({iceServers:ICE}),o={pc,au:null};pcs[k]=o;
-  stream.getTracks().forEach(t=>pc.addTrack(t,stream));
-  pc.ontrack=e=>{if(!o.au){o.au=document.createElement('audio');o.au.autoplay=true;$('#aud').append(o.au)}o.au.srcObject=e.streams[0]};
-  pc.onconnectionstatechange=()=>{if(pc.connectionState==='failed')closePc(k)};
-  return pc;
+
+function escapeHtml(text) {
+  return String(text).replace(/[&<>"']/g, character => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  }[character]));
 }
-const gathered=pc=>new Promise(r=>{if(pc.iceGatheringState==='complete')return r();
-  const f=()=>{if(pc.iceGatheringState==='complete'){pc.removeEventListener('icegatheringstatechange',f);r()}};
-  pc.addEventListener('icegatheringstatechange',f);setTimeout(r,3500)});
-async function connect(k){
-  const pc=mkPc(k);
-  try{await pc.setLocalDescription(await pc.createOffer());await gathered(pc);
-    room.emit('rtc',{to:k,t:'offer',sdp:pc.localDescription.sdp}).catch(()=>{})}catch(e){closePc(k);return}
-  setTimeout(()=>{const o=pcs[k];if(o&&o.pc===pc&&pc.connectionState!=='connected'){closePc(k);syncCall()}},9000);
+
+function configReady() {
+  return FIREBASE_CONFIG.apiKey &&
+    !FIREBASE_CONFIG.apiKey.includes("COLE_AQUI");
 }
-async function onRtc(m){
-  const d=m.data;if(!d||m.isMe||d.to!==myPeer||!vc||!stream)return;
-  const k=m.peer;
-  try{
-    if(d.t==='offer'){
-      closePc(k);const pc=mkPc(k);
-      await pc.setRemoteDescription({type:'offer',sdp:d.sdp});
-      await pc.setLocalDescription(await pc.createAnswer());await gathered(pc);
-      room.emit('rtc',{to:k,t:'answer',sdp:pc.localDescription.sdp}).catch(()=>{});
-    }else if(d.t==='answer'&&pcs[k]){await pcs[k].pc.setRemoteDescription({type:'answer',sdp:d.sdp})}
-  }catch(e){closePc(k)}
-}
-function syncCall(){
-  if(vc&&myPeer&&stream){
-    const alive=peers.filter(p=>!p.isMe&&p.presence&&p.presence.vc===vc).map(p=>p.peer);
-    Object.keys(pcs).forEach(k=>{if(!alive.includes(k))closePc(k)});
-    alive.forEach(k=>{if(!pcs[k]&&myPeer>k)connect(k)}); /* quem tem id maior inicia */
+
+try {
+  if (!configReady()) {
+    status("falta configurar a API Key do Firebase");
+
+    showError(
+      "Configure a apiKey do Firebase no início do arquivo index.html."
+    );
+  } else {
+    firebase.initializeApp(FIREBASE_CONFIG);
+
+    auth = firebase.auth();
+    db = firebase.firestore();
+
+    status("conectando ao Firebase...");
+
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        currentUser = user;
+        status("conectado");
+      }
+    });
   }
-  renderCall();
+} catch (error) {
+  status("erro ao iniciar");
+  showError(error.message);
 }
-function renderCall(){
-  const c=$('#call');if(!vc){c.style.display='none';return}
-  c.style.display='block';c.replaceChildren(el('b',null,'● Voz conectada'),el('div',null,vcn));
-  const mb=el('button',null,muted?'Ativar mic':'Mutar');
-  mb.onclick=()=>{muted=!muted;stream.getAudioTracks().forEach(t=>t.enabled=!muted);renderCall()};
-  const lb=el('button',null,'Sair');lb.onclick=leaveCall;c.append(mb,lb);
+
+/* ENTRAR */
+
+$("enter").onclick = async () => {
+  nickname = $("nickname").value.trim();
+
+  if (!nickname) {
+    showError("Digite seu nome.");
+    return;
+  }
+
+  if (!configReady() || !auth || !db) {
+    showError(
+      "Firebase não configurado. Confira a apiKey no código."
+    );
+    return;
+  }
+
+  try {
+    const credential = auth.currentUser
+      ? { user: auth.currentUser }
+      : await auth.signInAnonymously();
+
+    currentUser = credential.user;
+
+    await db.collection("users")
+      .doc(currentUser.uid)
+      .set({
+        nickname: nickname,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      }, { merge: true });
+
+    $("login").style.display = "none";
+    $("app").style.display = "grid";
+    $("account").textContent = nickname;
+
+    status("conectado como " + nickname);
+
+    loadServers();
+
+  } catch (error) {
+    showError("Não foi possível entrar: " + error.message);
+    status("erro de autenticação");
+  }
+};
+
+$("nickname").addEventListener("keydown", event => {
+  if (event.key === "Enter") {
+    $("enter").click();
+  }
+});
+
+/* LISTAR SERVIDORES */
+
+function loadServers() {
+  if (unsubscribeServers) {
+    unsubscribeServers();
+  }
+
+  unsubscribeServers = db.collection("servers")
+    .orderBy("createdAt", "desc")
+    .onSnapshot(snapshot => {
+
+      const box = $("serverList");
+      box.innerHTML = "";
+
+      if (snapshot.empty) {
+        box.innerHTML =
+          '<div class="empty">Nenhum servidor ainda. Clique em “Criar servidor”.</div>';
+        return;
+      }
+
+      snapshot.forEach(document => {
+        const data = document.data();
+        const button = document.createElement("button");
+
+        button.className = "serveritem";
+        button.textContent = "◉ " + (data.name || "Servidor");
+
+        button.onclick = () => {
+          selectServer(document.id, data.name || "Servidor");
+        };
+
+        box.appendChild(button);
+      });
+
+      if (!currentServer && !snapshot.empty) {
+        const first = snapshot.docs[0];
+
+        selectServer(
+          first.id,
+          first.data().name || "Servidor"
+        );
+      }
+
+    }, error => {
+      status("erro ao carregar servidores");
+      $("serverList").textContent = "Erro: " + error.message;
+    });
 }
-init();
+
+/* CRIAR SERVIDOR */
+
+async function createServer() {
+  if (!currentUser) return;
+
+  const name = prompt("Qual será o nome do servidor?");
+
+  if (!name || !name.trim()) return;
+
+  try {
+    const reference = await db.collection("servers").add({
+      name: name.trim().slice(0, 50),
+      ownerId: currentUser.uid,
+      ownerName: nickname,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+
+    await reference.collection("channels").doc("general").set({
+      name: "geral",
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+
+    selectServer(reference.id, name.trim());
+
+  } catch (error) {
+    alert("Erro ao criar servidor: " + error.message);
+  }
+}
+
+$("createServer").onclick = createServer;
+$("quickAdd").onclick = createServer;
+
+/* ABRIR SERVIDOR E MENSAGENS */
+
+function selectServer(id, name) {
+  currentServer = id;
+
+  $("roomTitle").textContent = name + " / # geral";
+
+  document.querySelectorAll(".serveritem").forEach(button => {
+    button.classList.toggle(
+      "active",
+      button.textContent === "◉ " + name
+    );
+  });
+
+  if (unsubscribeMessages) {
+    unsubscribeMessages();
+  }
+
+  $("messages").innerHTML =
+    '<div class="empty">Carregando mensagens...</div>';
+
+  unsubscribeMessages = db.collection("servers")
+    .doc(id)
+    .collection("messages")
+    .orderBy("createdAt", "asc")
+    .limit(100)
+    .onSnapshot(snapshot => {
+
+      const box = $("messages");
+      box.innerHTML = "";
+
+      if (snapshot.empty) {
+        box.innerHTML =
+          '<div class="welcome"><h2>Canal # geral</h2><p>Envie a primeira mensagem.</p></div>';
+        return;
+      }
+
+      snapshot.forEach(document => {
+        const message = document.data();
+        const element = document.createElement("div");
+
+        element.className = "msg";
+
+        const date =
+          message.createdAt && message.createdAt.toDate
+            ? message.createdAt.toDate().toLocaleString("pt-BR")
+            : "agora";
+
+        element.innerHTML =
+          "<strong>" +
+          escapeHtml(message.nickname || "Usuário") +
+          " <small>" + escapeHtml(date) + "</small></strong>" +
+          escapeHtml(message.text || "");
+
+        box.appendChild(element);
+      });
+
+      box.scrollTop = box.scrollHeight;
+
+    }, error => {
+      $("messages").textContent =
+        "Erro ao carregar mensagens: " + error.message;
+    });
+}
+
+/* ENVIAR MENSAGEM */
+
+$("composer").onsubmit = async event => {
+  event.preventDefault();
+
+  const text = $("messageInput").value.trim();
+
+  if (!text || !currentServer || !currentUser) return;
+
+  $("messageInput").value = "";
+
+  try {
+    await db.collection("servers")
+      .doc(currentServer)
+      .collection("messages")
+      .add({
+        text: text,
+        nickname: nickname,
+        uid: currentUser.uid,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+
+  } catch (error) {
+    alert("Erro ao enviar mensagem: " + error.message);
+    $("messageInput").value = text;
+  }
+};
+
+/* SAIR */
+
+$("logout").onclick = async () => {
+  if (unsubscribeMessages) unsubscribeMessages();
+  if (unsubscribeServers) unsubscribeServers();
+
+  await auth.signOut();
+
+  currentUser = null;
+  currentServer = null;
+
+  $("app").style.display = "none";
+  $("login").style.display = "block";
+
+  status("desconectado");
+};
 </script>
+
 </body>
 </html>
